@@ -7,8 +7,7 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-button @click="loadQuestions">Загрузить</b-button>
-        <b-col>{{quests}}</b-col>
+
       </b-row>
     </b-col>
   </b-row>
@@ -28,7 +27,7 @@ export default {
   },
   methods: {
     async loadQuestions(){
-      this.quests = (await this.$axios.get(window.location.protocol+'//'+window.location.hostname+'/questions.json')).data
+      this.quests = (await this.$axios.get(window.location.protocol+'//'+window.location.hostname+':'+window.location.port+'/questions.json')).data
     }
   }
 }

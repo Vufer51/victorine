@@ -4,7 +4,7 @@
       <b-col class="h4 text-center">Новый вопрос</b-col>
     </b-row>
     <b-row align-h="center">
-      <b-col >
+      <b-col>
         <b-row>
           <b-col>
             <b-form-input v-model="theme" placeholder="Тема"/>
@@ -72,17 +72,24 @@
             <b-img :src="imageUrl" fluid/>
           </b-col>
           <b-col>
-            Всего вопросов: {{questions.length}}
-            <b-button @click="addQuestion" block>Добавить вопрос</b-button>
-            <b-button @click="saveJSON" variant="primary" block>Сохранить файл</b-button>
+            Всего вопросов: {{ questions.length }}
+            <b-button block @click="addQuestion">Добавить вопрос</b-button>
+            <b-button block variant="primary" @click="saveJSON">Сохранить файл</b-button>
           </b-col>
         </b-row>
 
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="mt-3">
       <b-col>
-        {{ questions }}
+        <b-list-group>
+          <b-list-group-item v-for="(item,n) in questions" :key="n">
+            <b-row>
+              <b-col>{{ item.title }}</b-col>
+              <b-col cols="auto"><b-button size="sm" variant="danger" @click="deleteItem(n)">Удалить</b-button></b-col>
+            </b-row>
+          </b-list-group-item>
+        </b-list-group>
       </b-col>
     </b-row>
   </b-container>
@@ -110,7 +117,7 @@ export default {
   },
   methods: {
     async loadQuestions() {
-      this.questions = (await this.$axios.get(window.location.protocol+'//'+window.location.hostname+'/questions.json')).data
+      this.questions = (await this.$axios.get(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/questions.json')).data
     },
     addQuestion() {
       this.questions.push({
@@ -127,18 +134,18 @@ export default {
     },
     saveJSON() {
       function download(filename, text) {
-        var element = document.createElement('a');
+        let element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         element.setAttribute('download', filename);
-
         element.style.display = 'none';
         document.body.appendChild(element);
-
         element.click();
-
         document.body.removeChild(element);
       }
-      download('file.json',JSON.stringify(this.questions) )
+      download('file.json', JSON.stringify(this.questions))
+    },
+    deleteItem(itemNNumber){
+      this.questions.splice(itemNNumber,1)
     }
 
   }
