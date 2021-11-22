@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     async loadQuestions(){
-      this.quests = (await this.$axios.get('questions.json')).data
+      this.quests = (await this.$axios.get(window.location.protocol+'//'+window.location.hostname+'/questions.json')).data
     }
   }
 }
