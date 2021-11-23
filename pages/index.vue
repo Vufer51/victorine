@@ -8,5 +8,21 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data: function () {
+    return {
+      questions: [],
+
+    }
+  },
+  async created() {
+    await this.loadQuestions()
+    sessionStorage.setItem('questions', JSON.stringify(this.questions))
+  },
+  methods: {
+    async loadQuestions() {
+      this.questions = (await this.$axios.get(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/questions.json')).data
+    }
+  }
+}
 </script>

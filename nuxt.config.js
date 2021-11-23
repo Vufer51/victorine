@@ -7,7 +7,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'victorine',
+    title: 'Викторина',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -43,6 +43,19 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
   ],
+  bootstrapVue: {
+    componentPlugins: [
+      'LayoutPlugin',
+      'FormPlugin',
+      'FormCheckboxPlugin',
+      'FormInputPlugin',
+      'ButtonPlugin',
+      'CardPlugin',
+      'ListGroupPlugin',
+      'ImagePlugin'
+
+    ],
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
