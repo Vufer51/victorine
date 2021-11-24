@@ -52,7 +52,8 @@ export default {
       'ButtonPlugin',
       'CardPlugin',
       'ListGroupPlugin',
-      'ImagePlugin'
+      'ImagePlugin',
+      'FormTextareaPlugin',
 
     ],
   },
