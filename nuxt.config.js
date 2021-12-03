@@ -15,7 +15,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/icon.png' }
     ]
   },
 
@@ -63,8 +63,15 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
+    meta: {
+      favicon:false,
+      theme_color:'red'
+      /* meta options */
+    },
     manifest: {
-      lang: 'en'
+      name: 'Victorine',
+      lang: 'ru',
+      useWebmanifestExtension: true
     }
   },
 

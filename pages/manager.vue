@@ -86,12 +86,15 @@
           <b-list-group-item v-for="(item,n) in questions" :key="n">
             <b-row>
               <b-col>{{ item.title }}</b-col>
-              <b-col cols="auto"><b-button size="sm" variant="danger" @click="deleteItem(n)">Удалить</b-button></b-col>
+              <b-col cols="auto">
+                <b-button size="sm" variant="danger" @click="deleteItem(n)">Удалить</b-button>
+              </b-col>
             </b-row>
           </b-list-group-item>
         </b-list-group>
       </b-col>
     </b-row>
+    {{ this.questions }}
   </b-container>
 </template>
 
@@ -117,9 +120,12 @@ export default {
   },
   methods: {
     async loadQuestions() {
-      this.questions = (await this.$axios.get(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/questions.json')).data
+      sessionStorage.clear()
+      this.questions = (await this.$axios.get(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/questions.json?a='+ new Date() )).data
+      //this.questions.splice(0, this.questions.length, ...questions_new)
+
     },
-    addQuestion() {
+    async addQuestion() {
       this.questions.push({
         theme: this.theme,
         title: this.title,
@@ -130,6 +136,30 @@ export default {
         c: {title: this.c, correct: this.answer === 'c'},
         d: {title: this.d, correct: this.answer === 'd'},
       })
+      let sendForm = new FormData;
+      sendForm.append('question', JSON.stringify({
+          theme: this.theme,
+          title: this.title,
+          imageUrl: this.imageUrl,
+          fact: this.fact,
+          a: {title: this.a, correct: this.answer === 'a'},
+          b: {title: this.b, correct: this.answer === 'b'},
+          c: {title: this.c, correct: this.answer === 'c'},
+          d: {title: this.d, correct: this.answer === 'd'},
+        }
+      ))
+      // this.$axios.post(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/db_builder.php?action=add', {
+      await this.$axios({
+        method: "post",
+        url: window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/db_builder.php?action=add',
+        data: sendForm,
+        headers: {"Content-Type": "multipart/form-data"},
+
+      }).then(res => {
+        //this.questions.push(JSON.parse(res.data))
+        this.loadQuestions()
+      })
+
       this.theme = this.title = this.imageUrl = this.a = this.b = this.c = this.d = this.fact = ''
     },
     saveJSON() {
@@ -142,10 +172,12 @@ export default {
         element.click();
         document.body.removeChild(element);
       }
+
       download('file.json', JSON.stringify(this.questions))
     },
-    deleteItem(itemNNumber){
-      this.questions.splice(itemNNumber,1)
+    async deleteItem(itemNNumber) {
+      await this.$axios.get(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/db_builder.php?action=remove&number='+itemNNumber)
+      this.questions.splice(itemNNumber, 1)
     }
 
   }
