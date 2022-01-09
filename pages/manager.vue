@@ -94,7 +94,6 @@
         </b-list-group>
       </b-col>
     </b-row>
-    {{ this.questions }}
   </b-container>
 </template>
 
